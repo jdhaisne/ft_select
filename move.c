@@ -6,7 +6,7 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 12:42:06 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/09 13:02:33 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/11 12:54:22 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,26 +64,29 @@ t_dlist *del_word(t_dlist *dlist)
 	t_dnode *tmp;
 	int i;
 
-	if(dlist->head == NULL)
-		return(dlist);
+	if(dlist == NULL)
+		return(NULL);
 	tmp = dlist->head;
 	i = 0;
-	while (tmp != NULL && tmp->cursor_on == 0)
+	while (tmp->next != NULL && tmp->cursor_on == 0)
 	{
 		tmp = tmp->next;
 		i++;
 	}
 	if(tmp->next != NULL)
 	tmp->next->cursor_on = 1;
-	else if(tmp->prev != NULL)
+	else if(tmp->prev != NULL && tmp->prev != NULL)
 	tmp->prev->cursor_on = 1;
+		ft_putendl("G1");
 	dlist_deln(dlist, i);
+		ft_putendl("G2");
+	if (dlist->head == NULL)
+			return(NULL);
 	return(dlist);
 }
 
-int	move(char *key, t_dlist *dlist, struct termios old_term, int ttyfd)
+int	move(char *key, t_dlist *dlist, struct termios old_term)
 {
-	char *tmp;
 	if (key[0] == 27)
 	{
 		if (key[2] == 'D')
@@ -101,7 +104,9 @@ int	move(char *key, t_dlist *dlist, struct termios old_term, int ttyfd)
 	}
 	else if(key[0] == 127)
 	{
+		ft_putendl("D1");
 		dlist = del_word(dlist);
+		ft_putendl("D2");
 		return(1);
 	}
 	else if (key[0] == ' ')
@@ -111,7 +116,7 @@ int	move(char *key, t_dlist *dlist, struct termios old_term, int ttyfd)
 	}
 	else if (key[0] == '\n')
 	{
-		put_dlist(dlist, old_term, ttyfd);
+		put_dlist(dlist, old_term);
 		return (1);
 	}
 	return (0);

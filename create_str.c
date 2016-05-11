@@ -6,13 +6,13 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/08 13:26:26 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/08 15:57:25 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/11 14:04:21 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_select.h"
 
-void	put_dlist(t_dlist *dlist, struct termios old_term, int ttyfd)
+void	put_dlist(t_dlist *dlist, struct termios old_term)
 {
 	t_dnode	*head;
 	char	*str;
@@ -29,6 +29,7 @@ void	put_dlist(t_dlist *dlist, struct termios old_term, int ttyfd)
 		}
 		head = head->next;
 	}
+	tputs(tgetstr("cd", NULL), tgetnum("co"), ft_putchar2);
 	ft_putendl(str);
 	quit(old_term);
 }

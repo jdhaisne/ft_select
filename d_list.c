@@ -6,25 +6,51 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/30 11:43:10 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/09 13:17:40 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/11 13:03:09 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_select.h"
 
+void	dlist_del(t_dlist **dlist)
+{
+	t_dnode *tmp1;
+	t_dnode *tmp2;
+
+	if(*dlist != NULL)
+	{
+		tmp1 = (*dlist)->head;
+		while (tmp1 != NULL)
+		{
+			tmp2 = tmp1;
+			tmp1 = tmp1->next;
+			ft_strdel(&(tmp2->data));
+			free(tmp2);
+		}
+		free(*dlist);
+		dlist = NULL;
+	}
+}
+
 t_dlist	*dnode_del(t_dlist *dlist, t_dnode *tmp)
 {
-	if(tmp->next == NULL)
+	if(tmp->prev != NULL && tmp->next == NULL)
 	{
 		tmp->prev->next = NULL;
 		dlist->tail = tmp->prev;
 	}
-	else if (tmp->prev == NULL)
+	else if (tmp->next != NULL && tmp->prev == NULL)
 	{
 		tmp->next->prev = NULL;
 		dlist->head = tmp->next;
 	}
-	else
+	else if (tmp->prev == NULL && tmp->next == NULL)
+	{
+	free(tmp);
+		free(dlist);
+			return(NULL);
+	}
+	else 
 	{
 		tmp->prev->next = tmp->next;
 		tmp->next->prev = tmp->prev;

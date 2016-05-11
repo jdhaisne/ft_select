@@ -6,15 +6,15 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 13:18:26 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/09 14:33:37 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/11 13:37:47 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_select.h"
 
-int		get_max_word(t_dlist *dlist)
+size_t		get_max_word(t_dlist *dlist)
 {
-	int max_len;
+	size_t max_len;
 	t_dnode *head;
 
 	max_len = 0;
@@ -57,42 +57,40 @@ void	get_home_pos(int nb_line)
 	}
 }
 
-int	show_menu(t_dlist *dlist, int nb_col, int ttyfd)
+int	show_menu(t_data *data)
 {
 	int		i;
 	int		nb_word_col;
-	int		word_max;
+	size_t		word_max;
 	int		j;
 	t_dnode	*tmp;
-	char *tmp2;
 
-	if (dlist->head == NULL)
+	if (data->dlist->head == NULL)
 		return(-1);
-	word_max = get_max_word(dlist) + 1;
+	word_max = get_max_word(data->dlist) + 1;
 	tputs(tgetstr("cd", NULL), tgetnum("co"), ft_putchar2);
-	nb_word_col = tgetnum("co") / word_max;
+	nb_word_col = data->win.ws_col / word_max;
 	 i = 0;
-	 tmp = dlist->head;
+	 tmp = data->dlist->head;
 	while(tmp != NULL)
 	{
 		j = 0;
-		print_word(tmp, ttyfd);
+		print_word(tmp, data->ttyfd);
 		if((i + 1) % nb_word_col == 0 && (i + 1) != 0)
 		{
-			ft_putchar_fd('\n', ttyfd);
-			nb_col++;
+			ft_putchar_fd('\n', data->ttyfd);
 		}
 		else
 		{
 			while(ft_strlen(tmp->data) + j < word_max)
 			{
-				ft_putchar_fd(' ', ttyfd);
+				ft_putchar_fd(' ', data->ttyfd);
 				j++;
 			}
 		}
 		i++;
 		tmp = tmp->next;
 	}
-	get_home_pos(dlist->size / nb_word_col);
-	return (nb_col);
+	get_home_pos(data->dlist->size / nb_word_col);
+	return (0);
 }
