@@ -6,7 +6,7 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 13:18:26 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/11 13:37:47 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/12 17:06:05 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,16 @@ void	print_word(t_dnode *tmp, int ttyfd)
 	if(tmp->cursor_on == 1)
 	tputs(tgetstr("us", NULL), 1, ft_putchar2);
 	if(tmp->selected == 1)
-	tputs(tgetstr("so", NULL), 1, ft_putchar2);
+	{
+		tputs(tgetstr("so", NULL), 1, ft_putchar2);
+		ft_putstr_fd("\033[1;32m", ttyfd);
+	}
 	ft_putstr_fd(tmp->data, ttyfd);
 	if(tmp->selected == 1)
-	tputs(tgetstr("me", NULL), 1, ft_putchar2);
+	{
+		tputs(tgetstr("me", NULL), 1, ft_putchar2);
+		ft_putstr_fd("\033[1;0m", ttyfd);
+	}
 	if(tmp->cursor_on == 1)
 	tputs(tgetstr("ue", NULL), 1, ft_putchar2);
 }

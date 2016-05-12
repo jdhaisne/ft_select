@@ -6,7 +6,7 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 11:49:58 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/11 13:37:15 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/12 16:37:46 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,15 @@ t_dlist	*create_list(int argc, char **argv)
 	return (new);
 }
 
+t_term	init_term(t_term term)
+{
+	term.c_lflag &= ~(ICANON);
+	term.c_lflag &= ~(ECHO);
+	term.c_cc[VMIN] = 1;
+	term.c_cc[VTIME] = 0;
+	return (term);
+}
+
 t_data *init_data(t_data *data, int argc, char **argv, t_term old_term)
 {
 	data = (t_data *)malloc(sizeof(t_data));
@@ -51,12 +60,11 @@ t_data *init(int argc, char **argv, t_data *data)
 
 	tcgetattr(0, &term);
 	tcgetattr(0, &old_term);
-	term.c_lflag &= ~(ICANON);
-	term.c_lflag &= ~(ECHO);
-	term.c_cc[VMIN] = 1;
-	term.c_cc[VTIME] = 0;
+	term = init_term(term);
 	tcsetattr(0, TCSADRAIN, &term);
 	data = init_data(data, argc, argv, old_term);
-	//tputs(tgetstr("vi", NULL), 0, ft_putchar2);
+	data->term = term;
+	ft_putchar(data->term.c_cc[VSUSP]);
+	tputs(tgetstr("vi", NULL), 0, ft_putchar2);
 		return (data);
 }
