@@ -6,7 +6,7 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/09 13:17:47 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/12 16:59:36 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/13 14:04:57 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,19 @@ void	sigwinch_handler(t_data *data)
 
 void	sigtstp_handler(t_data *data)
 {
+	char cp[2];
+
+	cp[0] = data->term.c_cc[VSUSP];
+	cp[1] = 0;
 	restore_term(data->old_term);
 	signal(SIGTSTP, SIG_DFL);
-	ft_putchar2(data->term.c_cc[VSUSP]);
+	ioctl(0, TIOCSTI, cp);
 }
 
 void	sigcont_handler(t_data *data)
 {
 	tcsetattr(0, TCSADRAIN, &(data->term));
+	show_menu(data);
 	signal(SIGTSTP, signal_handler);
 }
 

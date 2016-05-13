@@ -6,7 +6,7 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 11:49:17 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/12 16:44:03 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/13 14:57:32 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		main(int argc, char **argv)
 		quit(data->old_term);
 	if(show_menu(data) == -1)
 		quit(data->old_term);
-	if (move(get_key(), data->dlist, data->old_term) == 2)
+	if (move(get_key(), data) == 2)
 	{
 		quit(data->old_term);
 	}

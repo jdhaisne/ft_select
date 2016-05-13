@@ -6,7 +6,7 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/25 13:55:12 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/12 16:37:05 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/13 14:57:19 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct		s_data
 	t_term old_term;
 	t_term term;
 	int		ttyfd;
+	int nb_word_line;
 }					t_data;
 
 t_dlist	*dlist_new();
@@ -62,7 +63,7 @@ char	**split_tab(char **tab, int i);
 size_t		get_max_word(t_dlist *dlist);
 int ft_putchar2(int i);
 int	quit(t_term old_term);
-int	move(char *key, t_dlist *dlist, t_term old_term);
+int	move(char *key, t_data *data);
 void	print_word(t_dnode *tmp, int ttyfd);
 t_dlist	*dlist_deln(t_dlist *dlist, int n);
 int	show_menu(t_data *data);
@@ -72,5 +73,6 @@ void	signal_handler(int signum);
 t_data	*stock_data(t_data *data, int mode);
 int	restore_term(t_term old_term);
 t_term	init_term(t_term term);
+t_dnode *dlist_goto(t_dlist *dlist, int n);
 
 #endif

@@ -6,11 +6,35 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/30 11:43:10 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/11 14:45:46 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/13 16:18:40 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_select.h"
+
+t_dnode *dlist_goto(t_dlist *dlist, int n)
+{
+	t_dnode	*tmp;
+	int		i;
+
+	if(dlist != NULL)
+	{
+		tmp = dlist->head;
+		i = 0;
+		if(n >= (int)dlist->size)
+			n = n - dlist->size;
+		if(n < 0)
+			n = n + dlist->size;
+		while(tmp != NULL && i <= n)
+		{
+			if(i == n)
+				return(tmp);
+			tmp = tmp->next;
+			i++;
+		}
+	}
+	return(NULL);
+}
 
 void	dlist_del(t_dlist **dlist)
 {

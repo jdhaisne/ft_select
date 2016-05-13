@@ -6,7 +6,7 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 13:18:26 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/12 17:06:05 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/13 14:40:47 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	get_home_pos(int nb_line)
 int	show_menu(t_data *data)
 {
 	int		i;
-	int		nb_word_col;
 	size_t		word_max;
 	int		j;
 	t_dnode	*tmp;
@@ -75,14 +74,14 @@ int	show_menu(t_data *data)
 		return(-1);
 	word_max = get_max_word(data->dlist) + 1;
 	tputs(tgetstr("cd", NULL), tgetnum("co"), ft_putchar2);
-	nb_word_col = data->win.ws_col / word_max;
+	data->nb_word_line = data->win.ws_col / word_max;
 	 i = 0;
 	 tmp = data->dlist->head;
 	while(tmp != NULL)
 	{
 		j = 0;
 		print_word(tmp, data->ttyfd);
-		if((i + 1) % nb_word_col == 0 && (i + 1) != 0)
+		if((i + 1) % data->nb_word_line == 0 && (i + 1) != 0)
 		{
 			ft_putchar_fd('\n', data->ttyfd);
 		}
@@ -97,6 +96,6 @@ int	show_menu(t_data *data)
 		i++;
 		tmp = tmp->next;
 	}
-	get_home_pos(data->dlist->size / nb_word_col);
+	get_home_pos(data->dlist->size / data->nb_word_line);
 	return (0);
 }

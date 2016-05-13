@@ -6,11 +6,47 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 12:42:06 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/11 12:54:22 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/13 16:18:42 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_select.h"
+
+void	go_up(t_dlist *dlist, int nb_word_line)
+{
+	t_dnode *start;
+	int i;
+
+	i = 0;
+	start = dlist->head;
+	while(start != NULL && start->cursor_on == 0)
+	{
+		start = start->next;
+		i++;
+	}
+	start->cursor_on = 0;
+	start = dlist_goto(dlist, i - nb_word_line);
+	start->cursor_on = 1;
+}
+
+void	go_down(t_dlist *dlist, int nb_word_line)
+{
+	t_dnode *start;
+	int i;
+
+	i = 0;
+	start = dlist->head;
+	while(start != NULL && start->cursor_on == 0)
+	{
+		start = start->next;
+		i++;
+	}
+	start->cursor_on = 0;
+	if(i + 5 > (int)dlist->size)
+		nb_word_line -= 1;
+	start = dlist_goto(dlist, i + nb_word_line);
+	start->cursor_on = 1;
+}
 
 void	go_left(t_dlist *dlist)
 {
@@ -85,18 +121,28 @@ t_dlist *del_word(t_dlist *dlist)
 	return(dlist);
 }
 
-int	move(char *key, t_dlist *dlist, struct termios old_term)
+int	move(char *key, t_data *data)
 {
 	if (key[0] == 27)
 	{
 		if (key[2] == 'D')
 		{
-			go_left(dlist);
+			go_left(data->dlist);
+			return (1);
+		}
+		else if(key[2] == 'A')
+		{
+			go_up(data->dlist, data->nb_word_line);
 			return (1);
 		}
 		else if (key[2] == 'C')
 		{
-			go_right(dlist);
+			go_right(data->dlist);
+			return (1);
+		}
+		else if (key[2] == 'B')
+		{
+			go_down(data->dlist, data->nb_word_line);
 			return (1);
 		}
 		else if (key[1] == 0)
@@ -105,18 +151,18 @@ int	move(char *key, t_dlist *dlist, struct termios old_term)
 	else if(key[0] == 127)
 	{
 		ft_putendl("D1");
-		dlist = del_word(dlist);
+		data->dlist = del_word(data->dlist);
 		ft_putendl("D2");
 		return(1);
 	}
 	else if (key[0] == ' ')
 	{
-		set_select(dlist);
+		set_select(data->dlist);
 		return (1);
 	}
 	else if (key[0] == '\n')
 	{
-		put_dlist(dlist, old_term);
+		put_dlist(data->dlist, data->old_term);
 		return (1);
 	}
 	return (0);
