@@ -6,7 +6,7 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/30 11:43:10 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/13 16:18:40 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/18 14:41:34 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,31 +56,35 @@ void	dlist_del(t_dlist **dlist)
 	}
 }
 
+void	free_node(t_dnode *node)
+{
+	ft_strdel(&(node->data));
+	node->prev = NULL;
+	node->next = NULL;
+	free(node);
+}
+
 t_dlist	*dnode_del(t_dlist *dlist, t_dnode *tmp)
 {
-	if(tmp->prev != NULL && tmp->next == NULL)
+	if(tmp->next == NULL && tmp->prev != NULL)
 	{
 		tmp->prev->next = NULL;
 		dlist->tail = tmp->prev;
 	}
-	else if (tmp->next != NULL && tmp->prev == NULL)
+	else if (tmp->prev == NULL && tmp->next != NULL)
 	{
 		tmp->next->prev = NULL;
 		dlist->head = tmp->next;
 	}
-	else if (tmp->prev == NULL && tmp->next == NULL)
-	{
-	free(tmp);
-		free(dlist);
-			return(NULL);
-	}
-	else 
+	else if(tmp->next != NULL && tmp->prev != NULL)
 	{
 		tmp->prev->next = tmp->next;
 		tmp->next->prev = tmp->prev;
 	}
-	free(tmp);
+	ft_putendl(tmp->data);
+	free_node(tmp);
 	dlist->size--;
+	
 	return (dlist);
 }
 
@@ -90,11 +94,15 @@ t_dlist	*dlist_deln(t_dlist *dlist, int n)
 	t_dnode *tmp;
 
 	i = 0;
+	if (dlist == NULL)
+		return(NULL);
 	tmp = dlist->head;
 	while(tmp != NULL && i <= n)
 	{
-		if (i == n)
+		if (i == n && dlist->head != NULL)
+		{
 			dlist = dnode_del(dlist, tmp);
+		}
 		else
 			tmp = tmp->next;
 		i++;

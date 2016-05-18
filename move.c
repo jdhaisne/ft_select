@@ -6,7 +6,7 @@
 /*   By: jdhaisne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/04 12:42:06 by jdhaisne          #+#    #+#             */
-/*   Updated: 2016/05/13 16:18:42 by jdhaisne         ###   ########.fr       */
+/*   Updated: 2016/05/18 15:33:01 by jdhaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,18 @@ t_dlist *del_word(t_dlist *dlist)
 		return(NULL);
 	tmp = dlist->head;
 	i = 0;
-	while (tmp->next != NULL && tmp->cursor_on == 0)
+	while (tmp != NULL && tmp->cursor_on == 0)
 	{
 		tmp = tmp->next;
 		i++;
 	}
-	if(tmp->next != NULL)
+	if(tmp != NULL && tmp->next != NULL)
 	tmp->next->cursor_on = 1;
-	else if(tmp->prev != NULL && tmp->prev != NULL)
+	else if(tmp != NULL && tmp->prev != NULL)
+	{
 	tmp->prev->cursor_on = 1;
-		ft_putendl("G1");
+	}
 	dlist_deln(dlist, i);
-		ft_putendl("G2");
 	if (dlist->head == NULL)
 			return(NULL);
 	return(dlist);
@@ -150,9 +150,8 @@ int	move(char *key, t_data *data)
 	}
 	else if(key[0] == 127)
 	{
-		ft_putendl("D1");
 		data->dlist = del_word(data->dlist);
-		ft_putendl("D2");
+		tputs(tgetstr("up", NULL), 0, ft_putchar2);
 		return(1);
 	}
 	else if (key[0] == ' ')
